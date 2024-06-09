@@ -1,6 +1,4 @@
-﻿@model WebApplication1.Models.Product
-
-@{
+﻿@{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,28 +8,53 @@
 <div>
     <h4>Product</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-    </dl>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label class="control-label">Product Name</label>
+                    <p id="Pname" class="form-control"></p>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label class="control-label">Product Price</label>
+                    <p id="Price" class="form-control"></p>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label class="control-label">Stock</label>
+                    <p id="Stock" class="form-control"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    function getQueryStringParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Product/GetProductDetails/?id=' + getQueryStringParameter('id'), // Adjust the URL to your endpoint
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $("#Pname").text(data.pname);
+                $("#Price").text(data.price);
+                $("#Stock").text(data.stock);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching product data:', error);
+            }
+        });
+    });
+</script>

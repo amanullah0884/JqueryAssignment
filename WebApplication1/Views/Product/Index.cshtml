@@ -35,6 +35,7 @@
                     rows += '<td>' + product.pname + '</td>';
                     rows += '<td>' + product.price + '</td>';
                     rows += '<td>' + product.stock + '</td>';
+                    rows += '<td> <a href="/product/details?id=' + product.id + '">Details</a> <a href="/product/delete?id=' + product.id + '">Delete</a></td>';
                     rows += '</tr>';
                 });
                 $('#prddata').html(rows);
