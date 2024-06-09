@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="control-label">Product Name</label>
+                <input id="Pname" class="form-control" />
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="control-label">Product Price</label>
+                <input id="Price" type="number" class="form-control" />
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="control-label">Stock</label>
+                <input id="Stock" type="number" class="form-control" />
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="form-group p-2">
+        <input type="submit" value="Create" onclick="submitProductDetails()" class="btn btn-primary" />
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    var submitProductDetails = () => {
+        var pName = $("#Pname").val();
+        var price = $("#Price").val();
+        var stock = $("#Stock").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Product/Create",
+            data: {
+            pname:pName,
+            price:price,
+            stock:stock
+            },
+            cache: false,
+            success: function (data) {
+                alert("Saved");
+                $("#Pname").val('');
+                $("#Price").val('');
+                $("#Stock").val('');
+                location.href='/Product';
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Product/GetProductList', // Adjust the URL to your endpoint
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var rows = '';
+                $.each(data, function (index, product) {
+                    rows += '<tr>';
+                    rows += '<td>' + product.name + '</td>';
+                    rows += '<td>' + product.price + '</td>';
+                    rows += '<td>' + product.stock + '</td>';
+                    rows += '</tr>';
+                });
+                $('#prddata').html(rows);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching product data:', error);
+            }
+        });
+    });
+</script>
